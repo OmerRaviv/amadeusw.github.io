@@ -12,12 +12,12 @@ Add first two lines:
             var asyncServiceProvider = (Microsoft.VisualStudio.Shell.IAsyncServiceProvider)this;
 
 Add services using GetServiceAsync
-
+```csharp
 DTE dte = await asyncServiceProvider.GetServiceAsync(typeof(DTE)) as DTE;
 var outputWindow = await asyncServiceProvider.GetServiceAsync(typeof(SVsOutputWindow)) as IVsOutputWindow;
             var statusBar = await asyncServiceProvider.GetServiceAsync(typeof(SVsStatusbar)) as IVsStatusbar;
 OleMenuCommandService mcs = await asyncServiceProvider.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-
+```
 Not everything will work async
 
 GetGlobalService can be replaced with await GetServiceAsync, but GetService needs to be synchronous.
