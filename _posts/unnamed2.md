@@ -8,15 +8,15 @@ using Tasks = System.Threading.Tasks;
 Change Initialize() to protected override async Tasks.Task InitializeAsync(Threading.CancellationToken token, IProgress<ServiceProgressData> progress)
 
 Add first two lines:
-            await base.InitializeAsync(token, progress);
-            var asyncServiceProvider = (Microsoft.VisualStudio.Shell.IAsyncServiceProvider)this;
+
 
 Add services using GetServiceAsync
 ```csharp
+await base.InitializeAsync(token, progress);
+var asyncServiceProvider = (Microsoft.VisualStudio.Shell.IAsyncServiceProvider)this;
 DTE dte = await asyncServiceProvider.GetServiceAsync(typeof(DTE)) as DTE;
-var outputWindow = await asyncServiceProvider.GetServiceAsync(typeof(SVsOutputWindow)) as IVsOutputWindow;
-            var statusBar = await asyncServiceProvider.GetServiceAsync(typeof(SVsStatusbar)) as IVsStatusbar;
-OleMenuCommandService mcs = await asyncServiceProvider.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+await JoinableTaskFactory.SwitchToMainThreadAsync();
+// Do stuff that has to happen on the UI thread
 ```
 Not everything will work async
 
