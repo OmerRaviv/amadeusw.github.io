@@ -21,21 +21,21 @@ OleMenuCommandService mcs = await asyncServiceProvider.GetServiceAsync(typeof(IM
 Not everything will work async
 
 GetGlobalService can be replaced with await GetServiceAsync, but GetService needs to be synchronous.
-
+```csharp
             var componentModel = (IComponentModel)AsyncPackage.GetGlobalService(typeof(SComponentModel));
             var workspace = componentModel.GetService<VisualStudioWorkspace>();
-
+```
 into
-
+```csharp
 var componentModel = await asyncServiceProvider.GetServiceAsync(typeof(SComponentModel)) as IComponentModel;
 await JoinableTaskFactory.SwitchToMainThreadAsync();
 var workspace = componentModel.GetService<VisualStudioWorkspace>();
-
+```
 
 Add Menu Commands only in UI thread
-
+```csharp
 await JoinableTaskFactory.SwitchToMainThreadAsync();
-
+```
 // PSST… Do I need to create instances in UI thread too?
                 CommandID toolwndCommandID = new CommandID(GuidList.guidProjectOrangeCmdSet, (int)PkgCmdIDList.cmdidShowLaunchControl);
                 MenuCommand menuToolWin = new MenuCommand(ShowLaunchControlCallback, toolwndCommandID);
